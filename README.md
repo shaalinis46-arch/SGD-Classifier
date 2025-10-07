@@ -18,62 +18,63 @@ To write a program to predict the type of species of the Iris flower using the S
 Program to implement the prediction of iris species using SGD Classifier.
 Developed by: 
 RegisterNumber:  
+*/
+# Logistic Regression using SGDClassifier
+
 import numpy as np
 import pandas as pd
-from sklearn.linear_model import SGDClassifier
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
+# Step 1: Create synthetic dataset
+X, y = make_classification(n_samples=1000, n_features=2, n_informative=2, 
+                           n_redundant=0, n_classes=2, random_state=42)
 
-# Example: Predict Placement (1 = Placed, 0 = Not Placed)
-data = {
-    'CGPA': [8.5, 6.8, 7.9, 5.4, 9.1, 8.0, 7.5, 6.0, 9.3, 5.8],
-    'Aptitude_Score': [82, 55, 75, 48, 92, 77, 73, 50, 95, 45],
-    'Communication_Skill': [8, 6, 7, 5, 9, 8, 7, 6, 9, 5],
-    'Placed': [1, 0, 1, 0, 1, 1, 1, 0, 1, 0]
-}
+# Step 2: Split into train & test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-df = pd.DataFrame(data)
-print("Dataset:\n", df, "\n")
+# Step 3: Initialize SGDClassifier for Logistic Regression
+model = SGDClassifier(loss='log_loss',  # logistic regression loss
+                      max_iter=1000,    # number of iterations
+                      tol=1e-3,         # stopping criterion
+                      random_state=42)
 
+# Step 4: Train the model
+model.fit(X_train, y_train)
 
-X = df[['CGPA', 'Aptitude_Score', 'Communication_Skill']]
-y = df['Placed']
+# Step 5: Predict on test data
+y_pred = model.predict(X_test)
 
-
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
-
-
-model = SGDClassifier(loss='log_loss', max_iter=1000, learning_rate='optimal', random_state=42)
-model.fit(X_train_scaled, y_train)
-
-y_pred = model.predict(X_test_scaled)
-
-
-print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
-print("\nClassification Report:\n", classification_report(y_test, y_pred))
+# Step 6: Evaluate performance
 print("Accuracy:", accuracy_score(y_test, y_pred))
+print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
 
-new_student = np.array([[8.3, 80, 8]])  # [CGPA, Aptitude, Communication]
-new_student_scaled = scaler.transform(new_student)
-prediction = model.predict(new_student_scaled)
+# Step 7: Visualize decision boundary
+plt.figure(figsize=(8,6))
+plt.scatter(X_test[:, 0], X_test[:, 1], c=y_pred, cmap='coolwarm', edgecolor='k')
+plt.title("Logistic Regression (SGDClassifier) Decision Boundary")
+plt.xlabel("Feature 1")
+plt.ylabel("Feature 2")
 
-print("\nNew Student Prediction:")
-if prediction[0] == 1:
-    print(" The student is LIKELY to be PLACED.")
-else:
-    print("The student is NOT likely to be placed.")
-*/
+# Decision boundary line
+x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.02),
+                     np.arange(y_min, y_max, 0.02))
+Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+Z = Z.reshape(xx.shape)
+plt.contourf(xx, yy, Z, alpha=0.2, cmap='coolwarm')
+
+plt.show()
 ```
 
 ## Output:
 ![prediction of iris species using SGD Classifier](sam.png)
-![alt text](<Screenshot 2025-10-06 211733.png>)
-
+![alt text](<Screenshot 2025-10-07 184306.png>)
+![alt text](<Screenshot 2025-10-07 184320.png>)
 ## Result:
 Thus, the program to implement the prediction of the Iris species using SGD Classifier is written and verified using Python programming.
