@@ -7,17 +7,17 @@ To write a program to predict the type of species of the Iris flower using the S
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
 ## Algorithm
-1. 
-2. 
-3. 
-4. 
+1. Load and split the dataset into training and testing sets.
+2. Scale the feature values for better performance.
+3. Train the SGD Classifier using logistic regression loss.
+4. Predict and evaluate the model using the test data.
 
 ## Program:
 ```
 /*
 Program to implement the prediction of iris species using SGD Classifier.
-Developed by: 
-RegisterNumber:  
+Developed by: shaalini.s
+RegisterNumber: 25017649 
 */
 # Logistic Regression using SGDClassifier
 
